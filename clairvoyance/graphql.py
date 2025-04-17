@@ -190,8 +190,8 @@ class Schema:
 class TypeRef:
     def __init__(
         self,
-        name: str,
-        kind: str,
+        name: str = "UNKNOWN",
+        kind: str = "UNKNOWN",
         is_list: bool = False,
         non_null_item: bool = False,
         non_null: bool = False,
@@ -205,6 +205,10 @@ class TypeRef:
         self.non_null = non_null
         self.list = self.is_list
         self.non_null_item = non_null_item
+    
+    # check if is unknown
+    def is_unknown(self) -> bool:
+        return self.name == "UNKNOWN"
 
     def __eq__(self, other: Any) -> bool:
         if isinstance(other, TypeRef):

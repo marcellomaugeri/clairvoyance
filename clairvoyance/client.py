@@ -23,13 +23,13 @@ class Client(IClient):  # pylint: disable=too-many-instance-attributes
         self._session = None
 
         self._headers = headers or {}
-        self._max_retries = max_retries or 3
+        self._max_retries = max_retries or 1
         self._semaphore = asyncio.Semaphore(concurrent_requests or 50)
         self.proxy = proxy
         self.backoff = backoff
         self._backoff_semaphore = asyncio.Lock()
         self.disable_ssl_verify = disable_ssl_verify or False
-
+        self.count = 0
         client_ctx.set(self)
 
     async def post(
@@ -60,7 +60,8 @@ class Client(IClient):  # pylint: disable=too-many-instance-attributes
                 )
 
                 if response.status >= 500:
-                    log().warning(f"Received status code {response.status}")
+                    self.count += 1
+                    log().warning(f"Received status code {response.status}, {self.count}")
                     return await self.post(document, retries + 1)
 
                 return await response.json(content_type=None)

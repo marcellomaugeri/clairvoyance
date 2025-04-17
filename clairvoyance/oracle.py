@@ -173,12 +173,15 @@ async def probe_valid_fields(
         response = await client().post(document)
         total_time = time.time() - start_time
 
-        errors = response["errors"]
+        errors = response["errors"] if "errors" in response else []
 
         log().debug(
             f"Sent {len(bucket)} fields, received {len(errors)} errors in {round(total_time, 2)} seconds"
         )
 
+        if not errors or response.status_code >= 500:
+            return []
+        
         for error in errors:
             error_message = error["message"]
 
@@ -441,7 +444,8 @@ async def probe_typeref(
     if not typeref and context != FuzzingContext.ARGUMENT:
         error_message = f"Unable to get TypeRef for {documents} in context {context}. "
         error_message += "It is very likely that Field Suggestion is not fully enabled on this endpoint."
-        raise EndpointError(error_message)
+        #raise EndpointError(error_message)
+        return graphql.TypeRef()
 
     return typeref
 
@@ -551,6 +555,9 @@ async def explore_field(
 
     args = []
     field = graphql.Field(field_name, typeref)
+    if field.type.kind == "UNKNOWN":
+        log().debug(f"Skip probe_args() for {field_name} because TypeRef is unknown")
+        return field, args
     if field.type.name in GraphQLPrimitive:
         log().debug(f'Skip probe_args() for "{field.name}" of type "{field.type.name}"')
     else:

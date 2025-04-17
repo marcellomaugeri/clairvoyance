@@ -1,0 +1,28 @@
+{
+    "data": {
+        "__schema": {
+            "directives": [],
+            "mutationType": null,
+            "queryType": null,
+            "subscriptionType": null,
+            "types": [
+                {
+                    "description": null,
+                    "enumValues": null,
+                    "interfaces": [],
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "possibleTypes": null
+                },
+                {
+                    "description": null,
+                    "enumValues": null,
+                    "interfaces": [],
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "possibleTypes": null
+                }
+            ]
+        }
+    }
+}

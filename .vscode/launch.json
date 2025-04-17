@@ -47,6 +47,23 @@
             ],
             "console": "integratedTerminal",
             "justMyCode": true
-        }
+        },
+        {
+            "name": "Clairvoyance Test",
+            "type": "debugpy",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "module": "clairvoyance",
+            "args": [
+                "-o",
+                "patio-test.json",
+                "-w",
+                "./overallWordlist-100k.txt",
+                "http://localhost:8080/graphql",
+                "--verbose"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
     ]
 }
